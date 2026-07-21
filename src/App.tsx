@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth";
 import { supabase } from "@/lib/supabase";
-import "@/store/theme"; // side-effect: applies saved theme before first paint
+import "@/store/theme";
 import Layout from "@/components/Layout";
 import Splash from "@/pages/Splash";
 import Login from "@/pages/Login";
@@ -23,8 +23,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuthStore();
   if (loading) return <Splash />;
   if (!user) return <Navigate to="/login" replace />;
-  // [New] Step-by-step onboarding gate — profiles.onboarded_at already
-  // existed in the schema (used by v1) but v2 needs to actually check it.
   if (profile && !profile.onboarded_at) return <Navigate to="/onboarding" replace />;
   return <>{children}</>;
 }
@@ -32,13 +30,38 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   const setUser = useAuthStore((s) => s.setUser);
   const [bootDone, setBootDone] = useState(false);
+  const [bootError, setBootError] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null);
-      setBootDone(true);
-    });
+    const timeout = setTimeout(() => {
+      setBootError("Taking too long to start. Check your connection and reopen the app.");
+    }, 10000);
+
+    supabase.auth.getSession()
+      .then(({ data }) => {
+        clearTimeout(timeout);
+        setUser(data.session?.user ?? null);
+        setBootDone(true);
+      })
+      .catch((err) => {
+        clearTimeout(timeout);
+        setBootError(`Could not start: ${(err as Error).message}`);
+      });
+
+    return () => clearTimeout(timeout);
   }, [setUser]);
+
+  if (bootError) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-6 text-center">
+        <div className="text-3xl">⚠️</div>
+        <p className="text-gray-600">{bootError}</p>
+        <button onClick={() => window.location.reload()} className="rounded-full bg-navy px-6 py-2.5 font-semibold text-white">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (!bootDone) return <Splash />;
 
