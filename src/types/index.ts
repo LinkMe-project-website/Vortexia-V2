@@ -17,6 +17,13 @@ export interface Profile {
   reputation_tier: ReputationTier | null;
   highlight_badge: string | null;
   profile_flair: string | null;
+  gender: string | null;
+  onboarded_at: string | null;
+  points_balance: number;
+  login_streak_count: number;
+  invited_by: string | null;
+  email_verified_at: string | null;
+  identity_verified_at: string | null;
   created_at: string;
 }
 

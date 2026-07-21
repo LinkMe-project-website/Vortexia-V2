@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
+import { getDeviceId } from "@/lib/device";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -14,12 +16,36 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } =
-      mode === "signin"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password }); // email-only signup — no social login, per Section 0 of the v1 masterplan
+
+    if (mode === "signin") {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      setLoading(false);
+      if (error) { setError(error.message); return; }
+      navigate("/");
+      return;
+    }
+
+    // [Invite System] New users must enter a valid invite code — checked
+    // server-side by redeem_invite_code() right after signup, before the
+    // user can do anything else in the app.
+    const trimmedCode = inviteCode.trim();
+    if (!trimmedCode) { setLoading(false); setError("An invite code is required to join VORTEXIA."); return; }
+
+    const { error: signUpError } = await supabase.auth.signUp({ email, password }); // email-only, no social login — Section 0
+    if (signUpError) { setLoading(false); setError(signUpError.message); return; }
+
+    const { data: redeemed, error: redeemError } = await supabase.rpc("redeem_invite_code", { p_code: trimmedCode });
+    if (redeemError || !redeemed) {
+      setLoading(false);
+      setError("That invite code is invalid, expired, or already used up.");
+      return;
+    }
+
+    // [Verification & Entry Rules] One account per device.
+    const { error: deviceError } = await supabase.rpc("register_device", { p_device_hash: getDeviceId() });
     setLoading(false);
-    if (error) { setError(error.message); return; }
+    if (deviceError) { setError(deviceError.message); return; }
+
     navigate("/");
   }
 
@@ -41,6 +67,13 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full rounded-full border border-gray-300 px-4 py-3 dark:bg-slate-800 dark:border-slate-700"
         />
+        {mode === "signup" && (
+          <input
+            type="text" required placeholder="Invite code" value={inviteCode}
+            onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+            className="w-full rounded-full border border-gray-300 px-4 py-3 uppercase tracking-widest dark:bg-slate-800 dark:border-slate-700"
+          />
+        )}
         {error && <p className="text-sm text-red-500">{error}</p>}
         <button
           type="submit" disabled={loading}

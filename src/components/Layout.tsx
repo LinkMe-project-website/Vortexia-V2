@@ -1,22 +1,29 @@
-import { NavLink, Outlet } from "react-router-dom";
-import { Home, Compass, MessageCircle, Bell, User } from "lucide-react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { LayoutGrid, Users, MessageCircle, Bell } from "lucide-react";
+import TopBar from "@/components/TopBar";
 
+// [Bug fix] Refactored down to exactly 4 clean bottom tabs — Profile is
+// reachable via the top-bar profile button instead of taking up a 5th tab.
 const TABS = [
-  { to: "/", label: "Home", icon: Home, end: true },
-  { to: "/discover", label: "Discover", icon: Compass, end: false },
+  { to: "/", label: "Dashboard", icon: LayoutGrid, end: true },
+  { to: "/community", label: "Community", icon: Users, end: false },
   { to: "/chats", label: "Chats", icon: MessageCircle, end: false },
   { to: "/notifications", label: "Notifications", icon: Bell, end: false },
-  { to: "/profile", label: "Profile", icon: User, end: false },
 ];
 
 export default function Layout() {
+  const { pathname } = useLocation();
+
   return (
     <div className="flex h-screen flex-col">
+      <TopBar path={pathname.startsWith("/chats/") ? "/chats" : pathname} />
       <main className="flex-1 overflow-y-auto pb-16">
         <Outlet />
       </main>
-      <nav className="fixed bottom-0 left-0 right-0 flex border-t border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900"
-           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <nav
+        className="fixed bottom-0 left-0 right-0 flex border-t border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
         {TABS.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -36,3 +43,4 @@ export default function Layout() {
     </div>
   );
 }
+

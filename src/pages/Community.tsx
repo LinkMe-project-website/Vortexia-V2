@@ -1,4 +1,4 @@
-export default function Discover() {
+export default function Community() {
   return (
     <div className="p-4 text-sm text-gray-500">
       Marketplace, forum, and Party Rooms (Section 6.6: category tags, online-now
