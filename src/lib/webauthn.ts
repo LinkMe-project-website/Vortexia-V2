@@ -24,7 +24,7 @@ async function callFn(payload: Record<string, unknown>) {
  */
 export async function registerBiometric(deviceLabel?: string) {
   const options = await callFn({ action: "reg-options" });
-  const attResp = await startRegistration({ optionsJSON: options });
+  const attResp = await startRegistration(options);
   return callFn({ action: "reg-verify", response: attResp, deviceLabel });
 }
 
@@ -35,7 +35,7 @@ export async function registerBiometric(deviceLabel?: string) {
  */
 export async function verifyBiometric() {
   const options = await callFn({ action: "auth-options" });
-  const authResp = await startAuthentication({ optionsJSON: options });
+  const authResp = await startAuthentication(options);
   return callFn({ action: "auth-verify", response: authResp });
 }
 
