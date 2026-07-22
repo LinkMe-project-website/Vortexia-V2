@@ -5,7 +5,7 @@ export interface Profile {
   full_name: string | null;
   email: string | null;
   avatar_url: string | null;
-  cover_url: string | null;
+  cover_photo_url: string | null;
   bio: string | null;
   mg_id: string | null;
   plan: string | null;
@@ -25,6 +25,10 @@ export interface Profile {
   email_verified_at: string | null;
   identity_verified_at: string | null;
   created_at: string;
+  contact_info: string | null;
+  skills: string[] | null;
+  timezone: string | null;
+  language: string | null;
 }
 
 export interface ChatThread {

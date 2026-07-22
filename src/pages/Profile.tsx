@@ -21,6 +21,7 @@ export default function Profile() {
   const { profile, signOut } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const navigate = useNavigate();
+
   if (!profile) return <div className="p-4">Loading…</div>;
 
   return (
@@ -54,6 +55,7 @@ export default function Profile() {
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
+        <Row label="✏️ Edit Profile" onClick={() => navigate("/profile/edit")} />
         <Row label="🎟️ Invite Codes" onClick={() => navigate("/invites")} />
         <Row label="🔒 Security & Verification" onClick={() => navigate("/security")} />
         <Row label="🎯 Tasks & Rewards" onClick={() => navigate("/tasks")} />
