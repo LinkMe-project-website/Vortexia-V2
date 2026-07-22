@@ -61,6 +61,8 @@ export default function Profile() {
       <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
         <Row label="✏️ Edit Profile" onClick={() => navigate("/profile/edit")} />
         <Row label="🏅 Badge Gallery" onClick={() => navigate("/badges")} />
+        <Row label="👥 Followers & Following" onClick={() => navigate("/connections")} />
+        <Row label="👀 Who Viewed My Profile" onClick={() => navigate("/who-viewed-me")} />
         <Row
           label="🔗 Share Profile"
           onClick={async () => {

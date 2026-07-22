@@ -27,6 +27,10 @@ import InfoPage from "@/pages/InfoPage";
 
 import BadgeGallery from "@/pages/BadgeGallery";
 
+import WhoViewedProfile from "@/pages/WhoViewedProfile";
+
+import Connections from "@/pages/Connections";
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuthStore();
   if (loading) return <Splash />;
@@ -118,6 +122,10 @@ export default function App() {
 <Route path="settings/info/:slug" element={<InfoPage />} />
 
 <Route path="badges" element={<BadgeGallery />} />
+
+<Route path="who-viewed-me" element={<WhoViewedProfile />} />
+
+<Route path="connections" element={<Connections />} />
       </Route>
     </Routes>
   );
