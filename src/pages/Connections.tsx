@@ -14,7 +14,7 @@ interface ConnRow {
 export default function Connections() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [tab, setTab] = useState<"followers" | "following">("followers");
+  const [tab, setTab] = useState<"followers" | "following" | "contacts">("followers");
   const [followers, setFollowers] = useState<ConnRow[]>([]);
   const [following, setFollowing] = useState<ConnRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +23,6 @@ export default function Connections() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-
     Promise.all([
       supabase
         .from("follows")
@@ -36,7 +35,6 @@ export default function Connections() {
     ]).then(([followersRes, followingRes]) => {
       if (followersRes.error) setError(followersRes.error.message);
       if (followingRes.error) setError(followingRes.error.message);
-
       setFollowers(
         (followersRes.data ?? []).map((row: any) => ({
           followRowId: row.id,
@@ -62,7 +60,10 @@ export default function Connections() {
     await supabase.from("follows").delete().eq("id", followRowId);
   }
 
-  const list = tab === "followers" ? followers : following;
+  const followingIds = new Set(following.map((f) => f.profileId));
+  const contacts = followers.filter((f) => followingIds.has(f.profileId));
+
+  const list = tab === "followers" ? followers : tab === "following" ? following : contacts;
 
   return (
     <div className="space-y-4 p-4">
@@ -86,6 +87,12 @@ export default function Connections() {
         >
           Following ({following.length})
         </button>
+        <button
+          onClick={() => setTab("contacts")}
+          className={`rounded-full px-4 py-1.5 text-sm font-semibold ${tab === "contacts" ? "bg-navy text-white" : "bg-gray-100 dark:bg-slate-800"}`}
+        >
+          Contacts ({contacts.length})
+        </button>
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
@@ -95,7 +102,11 @@ export default function Connections() {
           <p className="py-3 text-sm text-gray-400">Loading…</p>
         ) : list.length === 0 ? (
           <p className="py-3 text-sm text-gray-400">
-            {tab === "followers" ? "Wala ka pang followers." : "Wala ka pang sinusundan."}
+            {tab === "followers"
+              ? "Wala ka pang followers."
+              : tab === "following"
+              ? "Wala ka pang sinusundan."
+              : "Wala ka pang mutual connections."}
           </p>
         ) : (
           list.map((row) => (

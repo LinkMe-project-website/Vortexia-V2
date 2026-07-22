@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/auth";
 import { useThemeStore } from "@/store/theme";
 import ReputationBadge from "@/components/ReputationBadge";
 import HighlightBadge from "@/components/HighlightBadge";
+import ProfileContentTabs from "@/components/ProfileContentTabs";
 
 function Row({ label, onClick, right }: { label: string; onClick?: () => void; right?: React.ReactNode }) {
   return (
@@ -95,6 +96,8 @@ export default function Profile() {
           }
         />
       </div>
+
+      <ProfileContentTabs userId={profile.id} />
 
       <button onClick={signOut} className="w-full rounded-full border border-red-300 py-3 font-semibold text-red-500">
         Sign out
