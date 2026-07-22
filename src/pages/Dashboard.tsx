@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/auth";
 import { supabase } from "@/lib/supabase";
 import ReputationBadge from "@/components/ReputationBadge";
 import HighlightBadge from "@/components/HighlightBadge";
+import DashboardTabs from "@/components/dashboard/DashboardTabs";
 
 export default function Dashboard() {
   const { profile, refreshProfile } = useAuthStore();
@@ -81,9 +82,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="rounded-2xl border border-dashed border-gray-300 p-4 text-sm text-gray-500 dark:border-slate-700">
-        Marketplace feed, quick actions, and community recommendations go here next — see the rebuild roadmap.
-      </div>
+      <DashboardTabs />
     </div>
   );
 }
