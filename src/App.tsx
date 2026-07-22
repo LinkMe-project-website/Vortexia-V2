@@ -14,6 +14,7 @@ import ChatDetail from "@/pages/ChatDetail";
 import Notifications from "@/pages/Notifications";
 import Profile from "@/pages/Profile";
 import EditProfile from "@/pages/EditProfile";
+import Settings from "@/pages/Settings";
 import Invites from "@/pages/Invites";
 import Security from "@/pages/Security";
 import Tasks from "@/pages/Tasks";
@@ -99,6 +100,7 @@ export default function App() {
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile" element={<Profile />} />
         <Route path="profile/edit" element={<EditProfile />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="invites" element={<Invites />} />
         <Route path="security" element={<Security />} />
         <Route path="tasks" element={<Tasks />} />

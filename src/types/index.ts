@@ -29,6 +29,15 @@ export interface Profile {
   skills: string[] | null;
   timezone: string | null;
   language: string | null;
+  notif_email: boolean;
+  notif_in_app: boolean;
+  notif_sound: boolean;
+  notif_vibration: boolean;
+  notif_room_invite: boolean;
+  show_activity_status: boolean;
+  show_room_status: boolean;
+  allow_dm_from_everyone: boolean;
+  allow_unrestricted_messages: boolean;
 }
 
 export interface ChatThread {

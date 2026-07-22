@@ -56,6 +56,7 @@ export default function Profile() {
 
       <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
         <Row label="✏️ Edit Profile" onClick={() => navigate("/profile/edit")} />
+        <Row label="⚙️ Settings" onClick={() => navigate("/settings")} />
         <Row label="🎟️ Invite Codes" onClick={() => navigate("/invites")} />
         <Row label="🔒 Security & Verification" onClick={() => navigate("/security")} />
         <Row label="🎯 Tasks & Rewards" onClick={() => navigate("/tasks")} />
