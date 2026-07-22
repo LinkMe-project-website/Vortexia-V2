@@ -26,7 +26,10 @@ export default function Profile() {
 
   return (
     <div className="space-y-4 p-4">
-      <div className="flex items-center gap-3">
+      <button
+        onClick={() => navigate("/profile/edit")}
+        className="flex w-full items-center gap-3 text-left"
+      >
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-xl font-bold text-white">
           {profile.avatar_url ? (
             <img src={profile.avatar_url} className="h-full w-full rounded-full object-cover" alt="" />
@@ -40,8 +43,9 @@ export default function Profile() {
             <ReputationBadge tier={profile.reputation_tier} />
             <HighlightBadge badgeKey={profile.highlight_badge} />
           </div>
+          <div className="mt-0.5 text-xs text-gray-400">Tap to edit profile</div>
         </div>
-      </div>
+      </button>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between">
