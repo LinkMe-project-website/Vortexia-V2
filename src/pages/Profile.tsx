@@ -30,7 +30,7 @@ export default function Profile() {
         onClick={() => navigate("/profile/edit")}
         className="flex w-full items-center gap-3 text-left"
       >
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-xl font-bold text-white">
+        <div className={`flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-xl font-bold text-white ${profile.vip_status && (!profile.vip_until || new Date(profile.vip_until) > new Date()) ? "ring-2 ring-yellow-400 ring-offset-2 dark:ring-offset-slate-950" : ""}`}>
           {profile.avatar_url ? (
             <img src={profile.avatar_url} className="h-full w-full rounded-full object-cover" alt="" />
           ) : (
@@ -60,6 +60,19 @@ export default function Profile() {
 
       <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
         <Row label="✏️ Edit Profile" onClick={() => navigate("/profile/edit")} />
+        <Row label="🏅 Badge Gallery" onClick={() => navigate("/badges")} />
+        <Row
+          label="🔗 Share Profile"
+          onClick={async () => {
+            const text = `Add me on VORTEXIA! My name: ${profile.full_name ?? ""}${profile.mg_id ? ` (ID: ${profile.mg_id})` : ""}`;
+            if (navigator.share) {
+              try { await navigator.share({ text }); } catch {}
+            } else {
+              await navigator.clipboard.writeText(text);
+              alert("Na-copy na sa clipboard.");
+            }
+          }}
+        />
         <Row label="⚙️ Settings" onClick={() => navigate("/settings")} />
         <Row label="🎟️ Invite Codes" onClick={() => navigate("/invites")} />
         <Row label="🔒 Security & Verification" onClick={() => navigate("/security")} />

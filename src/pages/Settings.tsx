@@ -166,6 +166,52 @@ export default function Settings() {
       <button onClick={() => navigate("/security")} className="w-full rounded-full border border-gray-300 py-3 text-sm font-semibold dark:border-slate-700">
         🔒 Two-factor / Biometric setup
       </button>
+
+      <div>
+        <h2 className="mb-2 text-sm font-semibold text-gray-500">Account</h2>
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
+          <button onClick={() => navigate("/settings/account")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left last:border-0 dark:border-slate-800">
+            <span className="text-sm">✉️ Email & Password</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h2 className="mb-2 text-sm font-semibold text-gray-500">App Info</h2>
+        <div className="rounded-2xl border border-gray-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
+          <button onClick={() => navigate("/support")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left dark:border-slate-800">
+            <span className="text-sm">🆘 App Support / FAQ / Send Feedback</span>
+          </button>
+          <button onClick={() => navigate("/settings/info/guidelines")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left dark:border-slate-800">
+            <span className="text-sm">📋 Community Guidelines</span>
+          </button>
+          <button onClick={() => navigate("/settings/info/safety")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left dark:border-slate-800">
+            <span className="text-sm">🛡️ Safety Advice</span>
+          </button>
+          <button onClick={() => navigate("/settings/info/terms")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left dark:border-slate-800">
+            <span className="text-sm">📄 Terms of Use</span>
+          </button>
+          <button onClick={() => navigate("/settings/info/privacy")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left dark:border-slate-800">
+            <span className="text-sm">🔏 Privacy Policy</span>
+          </button>
+          <button onClick={() => navigate("/settings/info/about")} className="flex w-full items-center justify-between border-b border-gray-100 py-3 text-left last:border-0 dark:border-slate-800">
+            <span className="text-sm">ℹ️ About the Developer</span>
+          </button>
+        </div>
+      </div>
+
+      <button
+        onClick={async () => {
+          if ("caches" in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          alert("Na-clear na ang cache.");
+        }}
+        className="w-full rounded-full border border-gray-300 py-3 text-sm font-semibold dark:border-slate-700"
+      >
+        🧹 Clear cache
+      </button>
     </div>
   );
 }

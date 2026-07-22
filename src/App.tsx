@@ -21,6 +21,12 @@ import Tasks from "@/pages/Tasks";
 import TeamApplication from "@/pages/TeamApplication";
 import Support from "@/pages/Support";
 
+import AccountSettings from "@/pages/AccountSettings";
+
+import InfoPage from "@/pages/InfoPage";
+
+import BadgeGallery from "@/pages/BadgeGallery";
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, profile, loading } = useAuthStore();
   if (loading) return <Splash />;
@@ -106,6 +112,12 @@ export default function App() {
         <Route path="tasks" element={<Tasks />} />
         <Route path="team-application" element={<TeamApplication />} />
         <Route path="support" element={<Support />} />
+
+<Route path="settings/account" element={<AccountSettings />} />
+
+<Route path="settings/info/:slug" element={<InfoPage />} />
+
+<Route path="badges" element={<BadgeGallery />} />
       </Route>
     </Routes>
   );
