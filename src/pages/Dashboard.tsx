@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/auth";
 import { supabase } from "@/lib/supabase";
 import ReputationBadge from "@/components/ReputationBadge";
 import HighlightBadge from "@/components/HighlightBadge";
-import DashboardTabs from "@/components/dashboard/DashboardTabs";
+import FeedTimeline from "@/components/dashboard/FeedTimeline";
 
 export default function Dashboard() {
   const { profile, refreshProfile } = useAuthStore();
@@ -82,7 +82,10 @@ export default function Dashboard() {
         </div>
       )}
 
-      <DashboardTabs />
+      <div>
+        <h3 className="mb-2 text-sm font-bold text-gray-500">📰 Feeds</h3>
+        <FeedTimeline />
+      </div>
     </div>
   );
 }
